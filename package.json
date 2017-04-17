@@ -1,1 +1,39 @@
-{     "devDependencies": {         "gulp-json-sass": "*",         "electron-lite": "kaizhu256/node-electron-lite#alpha",         "utility2": "kaizhu256/node-utility2#alpha"     },     "name":"npmdoc-gulp-json-sass",     "homepage": "https://github.com/npmdoc/node-npmdoc-gulp-json-sass",     "repository": {         "type": "git",         "url": "https://github.com/npmdoc/node-npmdoc-gulp-json-sass.git"     },     "scripts": {         "build-ci": "utility2 shReadmeTest build_ci.sh"     },     "version": "0.0.1" }
+{
+    "author": "kai zhu <kaizhu256@gmail.com>",
+    "description": "api documentation for [gulp-json-sass (v0.0.2)](https://github.com/rbalicki2/gulp-json-sass) [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-json-sass.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-json-sass) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass)",
+    "devDependencies": {
+        "electron-lite": "kaizhu256/node-electron-lite#alpha",
+        "gulp-json-sass": "*",
+        "utility2": "kaizhu256/node-utility2#alpha"
+    },
+    "engines": {
+        "node": ">=4.0"
+    },
+    "homepage": "https://github.com/npmdoc/node-npmdoc-gulp-json-sass",
+    "keywords": [
+        "documentation",
+        "gulp-json-sass"
+    ],
+    "license": "MIT",
+    "main": "lib.npmdoc_gulp_json_sass.js",
+    "name": "npmdoc-gulp-json-sass",
+    "nameAlias": "npmdoc_gulp_json_sass",
+    "nameOriginal": "npmdoc-gulp-json-sass",
+    "os": [
+        "darwin",
+        "linux"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/npmdoc/node-npmdoc-gulp-json-sass.git"
+    },
+    "scripts": {
+        "build-ci": "utility2 shReadmeTest build_ci.sh",
+        "env": "env",
+        "heroku-postbuild": "npm install \"kaizhu256/node-utility2#alpha\" && utility2 shDeployHeroku",
+        "postinstall": "[ ! -f npm_scripts.sh ] || ./npm_scripts.sh postinstall",
+        "start": "PORT=${PORT:-8080} utility2 start test.js",
+        "test": "(set -e; export PORT=$(utility2 shServerPortRandom); utility2 test test.js)"
+    },
+    "version": "0.0.1"
+}
