@@ -1,0 +1,226 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/rbalicki2/gulp-json-sass"
+
+    >gulp-json-sass (v0.0.2)</a>
+</h1>
+<h4>Gulp plugin for turning JSON files into files of scss/sass variable definitions.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-json-sass">module gulp-json-sass</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-json-sass.gulp-json-sass">
+            function <span class="apidocSignatureSpan"></span>gulp-json-sass
+            <span class="apidocSignatureSpan">(opt)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-json-sass.toString">
+            function <span class="apidocSignatureSpan">gulp-json-sass.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.gulp-json-sass.toString">module gulp-json-sass.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-json-sass.toString.toString">
+            function <span class="apidocSignatureSpan">gulp-json-sass.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-json-sass" id="apidoc.module.gulp-json-sass">module gulp-json-sass</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-json-sass.gulp-json-sass" id="apidoc.element.gulp-json-sass.gulp-json-sass">
+        function <span class="apidocSignatureSpan"></span>gulp-json-sass
+        <span class="apidocSignatureSpan">(opt)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-json-sass = function (opt) {
+  opt = opt || {};
+  opt.delim = opt.delim || &#x27;-&#x27;;
+  opt.sass = !!opt.sass;
+  opt.eol = opt.sass ? &#x27;&#x27; : &#x27;;&#x27;;
+  opt.ignoreJsonErrors = !!opt.ignoreJsonErrors;
+  opt.escapeIllegalCharacters = opt.escapeIllegalCharacters === undefined ? true : opt.escapeIllegalCharacters;
+  opt.firstCharacter = opt.firstCharacter || &#x27;_&#x27;;
+  opt.prefixFirstNumericCharacter = opt.prefixFirstNumericCharacter === undefined ? true : opt.prefixFirstNumericCharacter;
+
+  function processJSON(file) {
+
+    // if it does not have a .json suffix, ignore the file
+    if (!gulpmatch(file,&#x27;**/*.json&#x27;)) {
+      this.push(file);
+      return;
+    }
+
+    // load the JSON
+    try {
+      var parsedJSON = JSON.parse(file.contents);
+    } catch (e) {
+      if (opt.ignoreJsonErrors) {
+        console.log(chalk.red(&#x27;[gulp-json-sass]&#x27;) + &#x27; Invalid JSON in &#x27; + file.path + &#x27;. (Continuing.)&#x27;);
+      } else {
+        console.log(chalk.red(&#x27;[gulp-json-sass]&#x27;) + &#x27; Invalid JSON in &#x27; + file.path);
+        this.emit(&#x27;error&#x27;, e);
+      }
+      return;
+    }
+
+    // process the JSON
+    var sassVariables = [];
+
+    loadVariablesRecursive(parsedJSON, &#x27;&#x27;, function pushVariable(assignmentString) {
+      sassVariables.push(assignmentString);
+    });
+
+    var sass = sassVariables.join(&#x27;\n&#x27;);
+    file.contents = Buffer(sass);
+
+    file.path = gutil.replaceExtension(file.path, opt.sass ? &#x27;.sass&#x27; : &#x27;.scss&#x27;);
+
+    this.push(file);
+  }
+
+  function loadVariablesRecursive(obj, path, cb) {
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        var val = obj[key];
+
+        // escape invalid sass characters
+        if (opt.escapeIllegalCharacters) {
+          key = replaceEscapableCharacters(key);
+        }
+
+        // sass variables cannot begin with a number
+        if (path === &#x27;&#x27; &#x26;&#x26; firstCharacterIsNumber.exec(key) &#x26;&#x26; opt.prefixFirstNumericCharacter) {
+          key = opt.firstCharacter + key;
+        }
+
+        if (typeof val !== &#x27;object&#x27;) {
+          cb(&#x27;$&#x27; + path + key + &#x27;: &#x27; + val + opt.eol);
+        } else {
+          loadVariablesRecursive(val, path + key + opt.delim, cb);
+        }
+      }
+    }
+  }
+
+  return through(processJSON);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-json-sass.toString" id="apidoc.element.gulp-json-sass.toString">
+        function <span class="apidocSignatureSpan">gulp-json-sass.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.gulp-json-sass.toString" id="apidoc.module.gulp-json-sass.toString">module gulp-json-sass.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-json-sass.toString.toString" id="apidoc.element.gulp-json-sass.toString.toString">
+        function <span class="apidocSignatureSpan">gulp-json-sass.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
