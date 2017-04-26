@@ -1,4 +1,7 @@
-# api documentation for  [gulp-json-sass (v0.0.2)](https://github.com/rbalicki2/gulp-json-sass)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-json-sass.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-json-sass) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass)
+# npmdoc-gulp-json-sass
+
+#### basic api documentation for  [gulp-json-sass (v0.0.2)](https://github.com/rbalicki2/gulp-json-sass)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-json-sass.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-json-sass) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-json-sass)
+
 #### Gulp plugin for turning JSON files into files of scss/sass variable definitions.
 
 [![NPM](https://nodei.co/npm/gulp-json-sass.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-json-sass)
@@ -66,7 +69,8 @@
         "rm": "rimraf ./coverage",
         "test": "npm run coverage && npm run rm"
     },
-    "version": "0.0.2"
+    "version": "0.0.2",
+    "bin": {}
 }
 ```
 
